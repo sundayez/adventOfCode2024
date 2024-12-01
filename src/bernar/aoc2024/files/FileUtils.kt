@@ -4,6 +4,6 @@ import java.io.File
 
 object FileUtils {
     fun readFile(fileName: String): List<String> {
-        return File(fileName).useLines { it.toList() }
+        return File(fileName).absoluteFile.useLines { it.toList() }
     }
 }

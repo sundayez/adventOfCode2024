@@ -12,25 +12,25 @@ fun main() {
 
     val differences = reports.map { report -> calculateDifferences(report) }
 
-    val safe = differences.count { difference -> differencesAreSafe(difference) }
+    val safe = differences.count { difference -> differenceIsSafe(difference) }
 
     println(safe)
 
     // part 2
 
     val differencesWithRemoval = reports.map {
-        report -> report.withIndex().map {
-            calculateDifferences(report.subList(0, it.index) + report.subList(it.index + 1, report.size))
+        report -> report.indices.map {
+            calculateDifferences(report.subList(0, it) + report.subList(it + 1, report.size))
         }
     }
 
-    val safeWithRemoval = differencesWithRemoval.count { it.any { difference -> differencesAreSafe(difference) } }
+    val safeWithRemoval = differencesWithRemoval.count { it.any { difference -> differenceIsSafe(difference) } }
 
     println(safeWithRemoval)
 }
 
-private fun differencesAreSafe(it: List<Int>) =
-    (it.all { eval -> eval > 0 } || it.all { eval -> eval < 0 }) && it.all { eval -> abs(eval) in 1..3 }
+private fun differenceIsSafe(difference: List<Int>) =
+    (difference.all { eval -> eval > 0 } || difference.all { eval -> eval < 0 }) && difference.all { eval -> abs(eval) in 1..3 }
 
-private fun calculateDifferences(it: List<Int>) =
-    it.zipWithNext().map { eval -> eval.second - eval.first }
+private fun calculateDifferences(report: List<Int>) =
+    report.zipWithNext().map { eval -> eval.second - eval.first }
